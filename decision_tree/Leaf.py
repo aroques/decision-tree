@@ -12,3 +12,14 @@ class Leaf:
 
     def __init__(self, rows):
         self.predictions = class_counts(rows)
+
+    def __repr__(self):
+        """
+        Returns:
+            A readable representation of a leaf
+        """
+        total = sum(self.predictions.values()) * 1.0
+        probs = {}
+        for lbl in self.predictions.keys():
+            probs[lbl] = str(int(self.predictions[lbl] / total * 100)) + "%"
+        return str(probs)

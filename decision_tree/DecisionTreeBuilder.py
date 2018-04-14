@@ -6,8 +6,8 @@ from .dataset_utils import class_counts, unique_vals
 
 class DecisionTreeBuilder:
 
-    def __init__(self, headers, rows):
-        self.headers = headers
+    def __init__(self, feature_names, rows):
+        self.feature_names = feature_names
         self.rows = rows
 
     def build(self):
@@ -60,11 +60,12 @@ class DecisionTreeBuilder:
 
         for col in range(num_features):
 
+            # Get list of the unique values in the current column
             values = unique_vals(rows, col)
 
             for val in values:
 
-                question = Question(self.headers, col, val)
+                question = Question(self.feature_names, col, val)
 
                 true_rows, false_rows = self.__partition(rows, question)
 

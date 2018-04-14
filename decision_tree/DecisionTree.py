@@ -3,9 +3,28 @@ from .Leaf import Leaf
 
 
 class DecisionTree:
-    def __init__(self, headers, rows):
-        tree_builder = DecisionTreeBuilder(headers, rows)
-        self.tree = tree_builder.build()
+    def __init__(self, feature_names, rows):
+        builder = DecisionTreeBuilder(feature_names, rows)
+        self.tree = builder.build()
+
+    def predict(self, row):
+        prediction = self.classify(row, self.tree)
+        return prediction
+
+    def classify(self, row, node):
+        """See the 'rules of recursion' above."""
+
+        # Base case: we've reached a leaf
+        if isinstance(node, Leaf):
+            return node
+
+        # Decide whether to follow the true-branch or the false-branch.
+        # Compare the feature / value stored in the node,
+        # to the example we're considering.
+        if node.question.match(row):
+            return self.classify(row, node.true_branch)
+        else:
+            return self.classify(row, node.false_branch)
 
     def print(self):
         self.print_tree(self.tree)
