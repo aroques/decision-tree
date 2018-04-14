@@ -74,7 +74,7 @@ class DecisionTreeClassifier:
         """
         # Base case: we've reached a leaf
         if isinstance(node, Leaf):
-            print(spacing + "Predict", node.predictions)
+            print(spacing + "Predict", node)
             return
 
         # Node is a Decision Node so print the question at this node
