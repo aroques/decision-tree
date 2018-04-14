@@ -2,10 +2,12 @@ from .dataset_utils import class_counts
 
 
 class Leaf:
-    """A Leaf node classifies data.
+    """
+    A Leaf node classifies data.
 
-    This holds a dictionary of class (e.g., "Apple") -> number of times
-    it appears in the rows from the training data that reach this leaf.
+    This holds a dictionary:
+        Key: class (e.g., "Apple")
+        Value: Number of times the class appears in the rows
     """
 
     def __init__(self, rows):

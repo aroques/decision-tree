@@ -1,5 +1,6 @@
 class DecisionNode:
-    """A Decision Node asks a question.
+    """
+    A Decision Node asks a question.
 
     This holds a reference to the question, and to the two child nodes.
     """

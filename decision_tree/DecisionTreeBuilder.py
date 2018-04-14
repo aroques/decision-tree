@@ -15,80 +15,84 @@ class DecisionTreeBuilder:
         return tree
 
     def build_tree(self, rows):
-        """Builds the tree.
+        """
+        Recursively builds a decision tree.
+        Args:
+            rows: Rows in a dataset
 
-        Rules of recursion: 1) Believe that it works. 2) Start by checking
-        for the base case (no further information gain). 3) Prepare for
-        giant stack traces.
+        Returns:
+            A decision tree
+
         """
 
-        # Try partitioning the dataset on each of the unique attribute,
-        # calculate the information gain,
-        # and return the question that produces the highest gain.
         gain, question = self.__find_best_split(rows)
 
-        # Base case: no further info gain
-        # Since we can ask no further questions,
-        # we'll return a leaf.
         if gain == 0:
+            # Base case: No more information gain, so return a leaf
             return Leaf(rows)
 
-        # If we reach here, we have found a useful feature / value
-        # to partition on.
-        true_rows, false_rows = DecisionTreeBuilder.__partition(rows, question)
+        # Use question to partition rows
+        true_rows, false_rows = self.__partition(rows, question)
 
-        # Recursively build the true branch.
+        # Recursively build the true and false branches
         true_branch = self.build_tree(true_rows)
-
-        # Recursively build the false branch.
         false_branch = self.build_tree(false_rows)
 
-        # Return a Question node.
-        # This records the best feature / value to ask at this point,
-        # as well as the branches to follow
-        # depending on the answer.
+        # The information gain is greater than 0 so return a decision node
         return DecisionNode(question, true_branch, false_branch)
 
     def __find_best_split(self, rows):
-        """Find the best question to ask by iterating over every feature / value
-        and calculating the information gain."""
-        best_gain = 0  # keep track of the best information gain
-        best_question = None  # keep train of the feature / value that produced it
+        """
+        Find the best question to ask by iterating over every feature / value
+        and calculating the information gain.
+        Args:
+            rows: Rows of a dataset
+
+        Returns:
+            best_gain: The amount of information gain that best_question produces
+            best_question: The question that produces the most information gain
+
+        """
+        best_gain = 0
+        best_question = None
         current_uncertainty = self.__gini(rows)
-        n_features = len(rows[0]) - 1  # number of columns
+        num_features = len(rows[0]) - 1
 
-        for col in range(n_features):  # for each feature
+        for col in range(num_features):
 
-            values = unique_vals(rows, col)  # unique values in the column
+            values = unique_vals(rows, col)
 
-            for val in values:  # for each value
+            for val in values:
 
                 question = Question(self.headers, col, val)
 
-                # try splitting the dataset
                 true_rows, false_rows = self.__partition(rows, question)
 
-                # Skip this split if it doesn't divide the
-                # dataset.
                 if len(true_rows) == 0 or len(false_rows) == 0:
+                    # The split does not divide the dataset so skip it
                     continue
 
-                # Calculate the information gain from this split
                 gain = self.__info_gain(true_rows, false_rows, current_uncertainty)
 
-                # You actually can use '>' instead of '>=' here
-                # but I wanted the tree to look a certain way for our
-                # toy dataset.
                 if gain >= best_gain:
                     best_gain, best_question = gain, question
 
         return best_gain, best_question
 
     def __info_gain(self, left, right, current_uncertainty):
-        """Information Gain.
+        """
+        Information Gain.
 
         The uncertainty of the starting node, minus the weighted impurity of
         two child nodes.
+        Args:
+            left: left partition of a dataset
+            right: right partition of a dataset
+            current_uncertainty: The uncertainty before splitting
+
+        Returns:
+            Information gained from splitting
+
         """
         total_len = len(left) + len(right)
         left_weight = float(len(left)) / total_len
@@ -97,11 +101,16 @@ class DecisionTreeBuilder:
 
     @staticmethod
     def __gini(rows):
-        """Calculate the Gini Impurity for a list of rows.
+        """
+        Calculate the Gini Impurity for a list of rows.
+        For more information see:
+          https://en.wikipedia.org/wiki/Decision_tree_learning#Gini_impurity
+        Args:
+            rows: Rows of a dataset
 
-        There are a few different ways to do this, I thought this one was
-        the most concise. See:
-        https://en.wikipedia.org/wiki/Decision_tree_learning#Gini_impurity
+        Returns:
+            The Gini Impurity of the list of rows
+
         """
         counts = class_counts(rows)
         impurity = 1
@@ -112,10 +121,17 @@ class DecisionTreeBuilder:
 
     @staticmethod
     def __partition(rows, question):
-        """Partitions a dataset.
+        """
+        Partitions a dataset.
 
-        For each row in the dataset, check if it matches the question. If
-        so, add it to 'true rows', otherwise, add it to 'false rows'.
+        Args:
+            rows: Rows of a dataset
+            question: The question to split the rows on
+
+        Returns:
+            true_rows: Rows that match the question
+            false_rows: Rows that do not match the question
+
         """
         true_rows, false_rows = [], []
         for row in rows:

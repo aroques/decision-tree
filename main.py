@@ -1,4 +1,3 @@
-from __future__ import print_function
 from decision_tree import DecisionTree
 
 
