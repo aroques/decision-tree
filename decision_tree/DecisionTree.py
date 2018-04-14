@@ -14,36 +14,70 @@ class DecisionTreeClassifier:
         self.tree = tree_builder.build(feature_names, rows)
 
     def predict(self, row):
+        """
+        Calls recursive classify function to produce a class prediction.
+        Args:
+            row: A row to be predicted
+
+        Returns:
+            A Leaf Node (class prediction)
+
+        """
         prediction = self.classify(row, self.tree)
         return prediction
 
     def classify(self, row, node):
-        """See the 'rules of recursion' above."""
+        """
+        Recursively classifies a row
+        Args:
+            row: The row to classify
+            node: Developer passes in the root node of the tree,
+                but the function will be recursively called with descending Decision Nodes
+                until a Leaf Node is returned.
 
-        # Base case: we've reached a leaf
+        Returns:
+            A Leaf Node
+
+        """
+        # Base case: We've reached a leaf
         if isinstance(node, Leaf):
             return node
 
-        # Decide whether to follow the true-branch or the false-branch.
-        # Compare the feature / value stored in the node,
-        # to the example we're considering.
+        # Node is an instance of a Decision Node
+
+        # Use the question stored in the Decision Node to
+        # traverse down either the true of false branch of the Decision Tree
         if node.question.match(row):
             return self.classify(row, node.true_branch)
         else:
             return self.classify(row, node.false_branch)
 
     def print(self):
+        """
+        Prints the Decision tree.
+        Returns:
+            None
+
+        """
         self.print_tree(self.tree)
 
     def print_tree(self, node, spacing=""):
-        """World's most elegant tree printing function."""
+        """
+        Uses recursion to print the decision tree.
+        Args:
+            node: Starting node (pass the root to print the whole tree)
+            spacing: Left-padding (indentation)
 
+        Returns:
+            None
+
+        """
         # Base case: we've reached a leaf
         if isinstance(node, Leaf):
             print(spacing + "Predict", node.predictions)
             return
 
-        # Print the question at this node
+        # Node is a Decision Node so print the question at this node
         print(spacing + str(node.question))
 
         # Call this function recursively on the true branch
