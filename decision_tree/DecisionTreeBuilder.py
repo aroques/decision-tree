@@ -5,12 +5,27 @@ from .dataset_utils import class_counts, unique_vals
 
 
 class DecisionTreeBuilder:
+    """
+    An object that builds CART Decision Trees
+    """
 
-    def __init__(self, feature_names, rows):
+    def __init__(self):
+        self.feature_names = None
+        self.rows = None
+
+    def build(self, feature_names, rows):
+        """
+        Builds a decision tree.
+        Args:
+            feature_names: The names of the features (column headers)
+            rows: Training data (X and Y)
+
+        Returns:
+            A Decision Tree
+
+        """
         self.feature_names = feature_names
         self.rows = rows
-
-    def build(self):
         tree = self.build_tree(self.rows)
         return tree
 

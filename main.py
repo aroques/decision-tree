@@ -1,4 +1,4 @@
-from decision_tree import DecisionTree
+from decision_tree import DecisionTreeClassifier
 
 
 def main():
@@ -11,7 +11,8 @@ def main():
         ['Yellow', 3, 'Lemon'],
     ]
     feature_names = training_data.pop(0)
-    mytree = DecisionTree(feature_names, training_data)
+    mytree = DecisionTreeClassifier()
+    mytree.fit(feature_names, training_data)
 
     mytree.print()
 
@@ -23,8 +24,12 @@ def main():
         ['Yellow', 3, 'Lemon'],
     ]
 
-    for row in testing_data:
-        print("Actual: %s. Predicted: %s" % (row[-1], mytree.predict(row)))
+    actual_values = []
+    for i, row in enumerate(testing_data):
+        actual_values.append(row.pop())
+
+    for i, row in enumerate(testing_data):
+        print("Actual: %s. Predicted: %s" % (actual_values[i], mytree.predict(row)))
 
 
 if __name__ == '__main__':

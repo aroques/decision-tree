@@ -2,10 +2,16 @@ from .DecisionTreeBuilder import DecisionTreeBuilder
 from .Leaf import Leaf
 
 
-class DecisionTree:
-    def __init__(self, feature_names, rows):
-        builder = DecisionTreeBuilder(feature_names, rows)
-        self.tree = builder.build()
+class DecisionTreeClassifier:
+    """
+    A CART Decision Tree Classifier
+    """
+    def __init__(self):
+        self.tree = None
+
+    def fit(self, feature_names, rows):
+        tree_builder = DecisionTreeBuilder()
+        self.tree = tree_builder.build(feature_names, rows)
 
     def predict(self, row):
         prediction = self.classify(row, self.tree)
