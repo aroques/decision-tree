@@ -39,7 +39,6 @@ class DecisionTreeBuilder:
             A decision tree
 
         """
-
         gain, question = self.__find_best_split(rows)
 
         if gain == 0:

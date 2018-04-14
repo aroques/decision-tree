@@ -38,3 +38,4 @@ class Leaf:
         for lbl in self.predictions.keys():
             probs[lbl] = str(int(self.predictions[lbl] / total * 100)) + "%"
         return str(probs)
+
