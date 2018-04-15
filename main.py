@@ -14,15 +14,19 @@ def main():
     print('Decision tree classifier trained:')
     decision_tree.print()
 
+    print()
+    print('Entering a loop to query the decision tree. Press ctrl-c at anytime to exit.')
+
     while True:
-        query = input('Query the decision tree [Y/n]?:').lower()
-        if query == '' or query == 'y':
-            sample = input('Enter a sample ({} numbers separated by a space): '.format(num_columns))
+        sample = input('Enter a sample ({} numbers separated by a space): '.format(num_columns))
+        try:
             sample = line_to_int_list(sample)
-            prediction = decision_tree.predict(sample)
-            print('Prediction: {}'.format(prediction))
-        elif query == 'n':
-            break
+        except ValueError:
+            print('Input was not {} numbers separated by a space. Please try again. '.format(num_columns))
+            continue
+        prediction = decision_tree.predict(sample)
+        print('Prediction: {}'.format(prediction))
+
 
 
 def get_feature_names(num_features):
@@ -73,6 +77,7 @@ def line_to_int_list(line):
         A list of integers. Ex: [1, 3, 5]
     """
     data = line.split(' ')
+    data = filter(None, data)
     data = [int(x.strip('\n')) for x in data]
     return data
 
