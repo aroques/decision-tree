@@ -27,6 +27,5 @@ python3.6 main.py filename
 python3.6 main.py -h
 ```
 
-
 #### Sources
 The following [decision tree tutorial](https://github.com/random-forests/tutorials/blob/master/decision_tree.py) was extremely helpful in constructing this project. For more information, follow the link.
