@@ -23,8 +23,8 @@ class DecisionTreeClassifier:
             A Leaf Node (class prediction)
 
         """
-        prediction = self.classify(row, self.tree)
-        return prediction
+        leaf = self.classify(row, self.tree)
+        return leaf.prediction()
 
     def classify(self, row, node):
         """
